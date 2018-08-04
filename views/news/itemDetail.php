@@ -1,10 +1,16 @@
-<?php // $item is from actionItemDetail?>
-<?= $this->context->renderPartial('_copyright'); ?>
-
-<h2>News Item Detail</h2>
-<br>
-<p>
-    <span>Title:</span><b><?= $item['title'] ?></b>
+Detail item with title <b><?= $title ?></b>
+<br><br>
+<?php if($itemFound !=null) {?>
+    <table border="1">
+        <?php foreach ($itemFound as $key => $value) { ?>
+            <tr>
+                <th><?= $key ?></th>
+                <td><?= $value ?></td>
+            </tr>  
+        <?php }?>
+    </table>
     <br>
-    <span>Date:</span><b><?= $item['date'] ?></b>
-</p>
+    Url for this item is: <?= yii\helpers\Url::to(['news/item-detail', 'title' => $title]); ?>
+<?php } else { ?>
+    <i>No item found</i>
+<?php } ?>

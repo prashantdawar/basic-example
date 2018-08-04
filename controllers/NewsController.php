@@ -10,9 +10,12 @@ class NewsController extends Controller {
     public function dataItems() {
         
         $newsList = [
-            ['id' => 1, 'title' => 'First World War', 'date' => '1914-07-28'],
-            ['id' => 2, 'title' => 'Second World War', 'date' => '1919-09-01'],
-            ['id' => 3, 'title' => 'Third World War', 'date' => '1969-07-20']
+            [ "id" => 1, "date" => "2015-04-19", "category" => "business","title" => "Test news of 2015-04-19" ],
+            [ "id" => 2, "date" => "2015-05-20", "category" => "shopping","title" => "Test news of 2015-05-20" ],
+            [ "id" => 3, "date" => "2015-06-21", "category" => "business","title" => "Test news of 2015-06-21" ],
+            [ "id" => 4, "date" => "2016-04-19", "category" => "shopping","title" => "Test news of 2016-04-19" ],
+            [ "id" => 5, "date" => "2017-05-19", "category" => "business","title" => "Test news of 2017-05-19" ],
+            [ "id" => 6, "date" => "2018-06-19", "category" => "shopping","title" => "Test news of 2018-06-19" ]         
         ];
 
         return $newsList;
@@ -23,7 +26,7 @@ class NewsController extends Controller {
      */
     public function actionIndex(){
         
-        echo "this is my first controller";
+        return $this->render('index');
     }
 
     /**
@@ -31,11 +34,24 @@ class NewsController extends Controller {
      */
 
     public function actionItemsList() {
+
+        $year = Yii::$app->request->get('year');
+        $category = Yii::$app->request->get('category');
         
         $newsList = $this->dataItems();
+        $filteredData = [];
+
+        foreach ($newsList as $n) {
+            if(($year != null) && (date('Y', strtotime($n['date'])) == $year)) 
+                $filteredData[] = $n;
+            if(($category != null) && ($n['category'] == $category))
+                $filteredData[] = $n;
+        }
 
         return $this->render('itemsList', [
-            'newsList' => $newsList
+            'year' => $year,
+            'category' => $category,
+            'filteredData' => $filteredData
         ]);
     }
 
@@ -43,17 +59,19 @@ class NewsController extends Controller {
      * Action lists cliclked item detail
      */
 
-    public function actionItemDetail($id) {
+    public function actionItemDetail() {
 
+        $title = Yii::$app->request->get('title');
         $newsList = $this->dataItems();
+        $itemFound = null;
 
-        $item = null;
         foreach ($newsList as $n) {
-            if($id == $n['id']) $item = $n;
+            if($n['title'] == $title) $itemFound = $n;
         }
-        
+
         return $this->render('itemDetail',[
-            'item' => $item
+            'title' => $title,
+            'itemFound' => $itemFound 
         ]);
     }
 
@@ -94,4 +112,17 @@ class NewsController extends Controller {
                 'responsive' => $responsive
             ]);
        }
+
+       /**
+        * Action for internation index
+
+        */
+
+        public function actionInternationalIndex() {
+            
+            $lang = Yii::$app->request->get('lang', 'en');
+            Yii::$app->language = $lang;
+
+            return $this->render('internationalIndex');
+        }
 }

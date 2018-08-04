@@ -1,22 +1,24 @@
-<?php
+<?php if($year != null) { ?>
+    <b>List for year <?= $year?></b>
+<?php } ?>
 
-    //$newsList is from actionItemsList
-?>
-<?= $this->context->renderPartial('_copyright'); ?>
+<?php if($category != null) { ?>
+    <b>List for category <?= $category ?></b>
+<?php } ?>
 
-<table>
+<br><br>
+
+<table border="1">
     <tr>
+        <th>Date</th>
+        <th>Category</th>
         <th>Title</th>
-        <th>Date</th>   
     </tr>
-    <?php foreach($newsList as $item) { ?>
+    <?php foreach ($filteredData as $fd) { ?>
         <tr>
-            <td>
-                <a href="<?= Yii::$app->urlManager->createUrl(['news/item-detail', 'id' => $item['id']]) ?>"><?= $item['title']?></a>
-            </td>
-            <td>
-                <?= Yii::$app->formatter->asDatetime($item['date'], 'php:d/m/Y'); ?>
-            </td>
+            <td><?= $fd['date']?></td>
+            <td><?= $fd['category']?></td>
+            <td><?= $fd['title']?></td>
         </tr>
-    <?php }?>
+    <?php } ?>
 </table>

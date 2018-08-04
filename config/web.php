@@ -42,15 +42,27 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
-        /*
+        'db' => $db,        
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-            ],
+                'news/<year:\d{4}>/items-list' => 'news/items-list',
+                [
+                    'pattern' => 'news/<category:\w+>/items-list',
+                    'route' => 'news/items-list',
+                    'defaults' => ['category' => 'shopping']
+                ],
+                [
+                    'pattern' => '<lang:\w+>/<controller>/<action>',
+                    'route' => '<controller>/<action>'
+                ],
+                [
+                    'class' => 'app\components\NewsUrlRule'
+                ]
+            ]
         ],
-        */
+        
     ],
     'params' => $params,
 ];
