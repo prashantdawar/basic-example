@@ -18,22 +18,45 @@ class RoomsController extends Controller {
     public function actionCreate() {
 
         $model = new Room();
-        $modelCanSave = false;
 
-        if($model->load(Yii::$app->request->post()) && $model->validate()){
-            
-            $model->fileImage = UploadedFile::getInstance($model, 'fileImage');
+        if($model->load(Yii::$app->request->post()) && ($model->save())) {
 
-            if($model->fileImage) {
-                $model->fileImage->saveAs(Yii::getAlias('@uploadedfilesdir/' . $model->fileImage->baseName . '.'. $model->fileImage->extension));
-            }
-
-            $modelCanSave = true;
+            return $this->redirect(['detail', 'id' => $model->id]);
         }
 
         return $this->render('create', [
-            'model' => $model,
-            'modelCanSave' => $modelCanSave
+            'model' => $model
+        ]);
+    }
+
+
+    /**
+     * Action update entries
+     */
+    public function actionUpdate($id){
+
+        $model = Room::findOne($id);
+
+        if(($model != null) && $model->load(Yii::$app->request->post()) && $model->save()){
+            
+            return $this->redirect(['detail', 'id' => $model->id]);
+        }
+
+        return $this->render('update', [
+            'model' => $model
+        ]);
+    }
+
+    /**
+     * Action for detail view
+     * 
+     */
+    public function actionDetail($id){
+
+        $model = Room::findOne($id);
+
+        return $this->render('detail',[
+            'model' => $model
         ]);
     }
 

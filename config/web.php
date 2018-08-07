@@ -6,6 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    'timeZone' => 'GMT',
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -63,7 +64,10 @@ $config = [
                 ]
             ]
         ],
-        
+        'dbSqlite' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'sqlite:'.dirname(__DIR__).'/web/db.sqlite'
+        ]
     ],
     'params' => $params,
 ];

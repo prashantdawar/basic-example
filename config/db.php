@@ -5,7 +5,10 @@ return [
     'dsn' => 'mysql:host=localhost;dbname=my_database',
     'username' => 'root',
     'password' => '',
-    'charset' => 'utf8',
+    'charset' => 'utf8',    
+    'on afterOpen' => function($event) {
+        $event->sender->createCommand("SET time_zone = '+00:00'" )->execute();
+    } 
 
     // Schema cache options (for production environment)
     //'enableSchemaCache' => true,
