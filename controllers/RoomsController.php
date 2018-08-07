@@ -6,6 +6,8 @@ use Yii;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use app\models\Room;
+use app\models\Reservation;
+use app\models\Customer;
 
 class RoomsController extends Controller {
 
@@ -86,6 +88,85 @@ class RoomsController extends Controller {
         return $this->render('indexFiltered', [
             'rooms' => $rooms,
             'searchFilter' => $searchFilter
+        ]);
+      }
+
+      /**
+       * Action for last reservation
+       */
+      public function actionLastReservationByRoomId($room_id) {
+
+        $room = Room::findOne($room_id);
+
+        $lastReservation = $room->lastReservation;
+
+        return $this->render('lastReservationByRoomId',[
+            'room' => $room,
+            'lastReservation' => $lastReservation
+        ]);
+      }
+
+      /**
+       * Action last reservation for every room
+       */
+      public function actionLastReservationForEveryRoom() {
+            $rooms = Room::find()
+                        ->with('lastReservation')
+                        ->all();
+
+            return $this->render('lastReservationForEveryRoom',[
+                'rooms' => $rooms
+            ]);
+            
+      }
+
+      /**
+       * Action for connected relationships
+       */
+      public function actionIndexWithRelationships() {
+
+        $room_id = Yii::$app->request->get('room_id', null);
+        $reservation_id = Yii::$app->request->get('reservation_id', null);
+        $customer_id = Yii::$app->request->get('customer_id', null);
+
+        $roomSelected = null;
+        $reservationSelected = null;
+        $customerSelected = null;
+
+        if($room_id != null) {
+            $roomSelected = Room::findOne($room_id);
+
+            $rooms = array($roomSelected);
+            $reservations = $roomSelected->reservations;
+            $customers = $roomSelected->customers;
+        } else if($reservation_id != null) {
+            
+            $reservationSelected = Reservation::findOne($reservation_id);
+
+            $rooms = array($reservationSelected->room);
+            $reservations = array($reservationSelected);
+            $customers = array($reservationSelected->customer);
+
+        } else if($customer_id != null){
+
+            $customerSelected = Customer::findOne($customer_id);
+
+            $rooms = $customerSelected->rooms;
+            $reservations = $customerSelected->reservations;
+            $customers = array($customerSelected);
+        } else {
+            $rooms = Room::find()->all();
+            $reservations = Reservation::find()->all();
+            $customers = Customer::find()->all();
+        }
+
+        return $this->render('indexWithRelationships',[
+            'roomSelected' => $roomSelected,
+            'reservationSelected' => $reservationSelected,
+            'customerSelected' => $customerSelected,
+            'rooms' => $rooms,
+            'reservations' => $reservations,
+            'customers' => $customers
         ]);
       }
 }

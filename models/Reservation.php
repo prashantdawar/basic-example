@@ -14,6 +14,9 @@ use Yii;
  * @property string $date_from
  * @property string $date_to
  * @property string $reservation_date
+ *
+ * @property Room $room
+ * @property Customer $customer
  */
 class Reservation extends \yii\db\ActiveRecord
 {
@@ -35,6 +38,8 @@ class Reservation extends \yii\db\ActiveRecord
             [['room_id', 'customer_id'], 'integer'],
             [['price_per_day'], 'number'],
             [['date_from', 'date_to', 'reservation_date'], 'safe'],
+            [['room_id'], 'exist', 'skipOnError' => true, 'targetClass' => Room::className(), 'targetAttribute' => ['room_id' => 'id']],
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
         ];
     }
 
@@ -52,5 +57,21 @@ class Reservation extends \yii\db\ActiveRecord
             'date_to' => 'Date To',
             'reservation_date' => 'Reservation Date',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRoom()
+    {
+        return $this->hasOne(Room::className(), ['id' => 'room_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
     }
 }
