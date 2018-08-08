@@ -60,4 +60,8 @@ class Customer extends \yii\db\ActiveRecord
         return $this->hasMany(Room::className(), ['id' => 'room_id'])
                     ->via('reservations');
     }
+
+    public function getReservationsCount(){
+        return $this->hasMany(\app\models\Reservation::className(),['customer_id' => 'id'])->count();
+    }
 }
