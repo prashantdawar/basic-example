@@ -15,7 +15,7 @@ use yii\helpers\Html;
             'phone_number',
             [
                 'header' => 'Reservations',
-                'content' => function($model, $index, $column) {
+                'content' => function($model, $key, $index, $column) {
                     $title = sprintf('Reservations (%d)', $model->reservationsCount);
                     return Html::a($title, [
                         'reservations/grid',

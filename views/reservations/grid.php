@@ -34,6 +34,11 @@ use app\models\Room;
             'customer_id',
             'price_per_day',
             'date_from',
-            'date_to',
+            'date_to',            
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{delete}',
+                'header' => 'Actions'
+            ]
         ]
 ]); ?>
