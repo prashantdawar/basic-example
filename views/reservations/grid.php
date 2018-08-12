@@ -31,7 +31,10 @@ use app\models\Room;
                     return $model->room->floor;
                 }
             ],
-            'customer_id',
+            [
+                'header' => 'Customer',
+                'attribute' => 'customer.surname'
+            ],
             'price_per_day',
             'date_from',
             'date_to',            
