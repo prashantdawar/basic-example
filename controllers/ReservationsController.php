@@ -25,7 +25,7 @@ class ReservationsController extends Controller {
                 'customer.surname',
                 $searchModel->getAttribute('customer.surname')
             ]);
-            
+
             $query->andFilterWhere([
                 'id' => $searchModel->id,
                 'customer_id' => $searchModel->customer_id,
@@ -34,6 +34,9 @@ class ReservationsController extends Controller {
                 // 'customer_id' => isset($_GET['Reservation']['customer_id']) ? $_GET['Reservation']['customer_id'] : null
             ]);
         }
+
+        // passed from `grid` view
+        $resultQueryAveragePricePerDay = $query->average('price_per_day');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -44,7 +47,8 @@ class ReservationsController extends Controller {
 
         return $this->render('grid',[
             'dataProvider' => $dataProvider,
-            'searchModel' => $searchModel
+            'searchModel' => $searchModel,
+            'resultQueryAveragePricePerDay' => $resultQueryAveragePricePerDay
         ]);
     }
 }
