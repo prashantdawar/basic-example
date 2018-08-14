@@ -74,4 +74,17 @@ class Reservation extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
     }
+
+    /**
+     * Get description
+     */
+    public function getDescription(){
+        $content = sprintf(
+                        'reservation #%s at %s', 
+                        $this->id, date('Y-m-d H:i:s'),
+                        strtotime($this->reservation_date)
+                    );
+        
+        return $content;
+    }
 }
