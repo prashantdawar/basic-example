@@ -173,4 +173,47 @@ class ReservationsController extends Controller {
 
         return $output;
      }
+
+     public function actionCreateCustomerAndReservation(){
+
+        $customer = new \app\models\Customer();
+        $reservation = new \app\models\Reservation();
+
+        
+        $reservation->customer_id = 0;
+
+        if(
+            $customer->load(Yii::$app->request->post())
+            &&
+            $reservation->load(Yii::$app->request->post())
+            &&
+            $customer->validate()
+            &&
+            $reservation->validate()
+
+        ) {
+            $dbTrans = Yii::$app->db->beginTransaction();
+
+            $customerSaved = $customer->save();
+            // var_dump($customer);
+            // echo "hi"; die;
+            if($customerSaved) {
+                $reservation->customer_id = $customer->id;
+                $reservationSaved = $reservation->save();
+
+                if($reservationSaved){
+                    $dbTrans->commit();
+                } else {
+                    $dbTrans->rollBack();
+                }
+            } else {
+                $dbTrans->rollback();
+            }
+        }
+
+        return $this->render('createCustomerAndReservation',[
+            'customer' => $customer,
+            'reservation' => $reservation
+        ]);
+     }
 }
