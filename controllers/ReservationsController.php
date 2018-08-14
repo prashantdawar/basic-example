@@ -180,7 +180,7 @@ class ReservationsController extends Controller {
         $reservation = new \app\models\Reservation();
 
         
-        $reservation->customer_id = 0;
+        // $reservation->customer_id = 0;
 
         if(
             $customer->load(Yii::$app->request->post())
@@ -188,15 +188,13 @@ class ReservationsController extends Controller {
             $reservation->load(Yii::$app->request->post())
             &&
             $customer->validate()
-            &&
-            $reservation->validate()
-
         ) {
             $dbTrans = Yii::$app->db->beginTransaction();
 
             $customerSaved = $customer->save();
             // var_dump($customer);
             // echo "hi"; die;
+        //    echo $customer->id; die;
             if($customerSaved) {
                 $reservation->customer_id = $customer->id;
                 $reservationSaved = $reservation->save();
