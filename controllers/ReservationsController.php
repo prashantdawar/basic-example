@@ -167,7 +167,7 @@ class ReservationsController extends Controller {
         $items = Reservation::findAll(['customer_id' => $customer_id]);
 
         foreach($items as $item) {
-            $content = sprtinf('reservation #%s at %s', $item->id, date('Y-m-d H:i:s', strtotime($item->reservation_date)));
+            $content = sprintf('reservation #%s at %s', $item->id, date('Y-m-d H:i:s', strtotime($item->reservation_date)));
             $output = \yii\helpers\Html::tag('option', $content, ['value' => $item->id]);
         }
 

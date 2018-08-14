@@ -12,7 +12,7 @@ $urlReservationsByCustomer = Url::to(['reservations/ajax-drop-down-list-by-custo
 $this->registerJs( <<< EOT_JS
 
     $(document).on('change', '#reservation-customer_id', function(ev) {
-        $('#detail).hide();
+        $('#detail').hide();
 
         var customerId = $(this).val();
         $.get(
@@ -30,7 +30,7 @@ $this->registerJs( <<< EOT_JS
     $(document).on('change', '#reservation-id', function(ev) {
         $(this).parents('form').submit();
         ev.preventDefault();
-    }
+    });
 
 EOT_JS
 );
